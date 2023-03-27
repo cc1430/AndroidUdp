@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.cc.wasu.softap.lib'
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'org.jetbrains:annotations:15.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    //fastjson
+    implementation 'com.alibaba:fastjson:1.2.41'
+}
+
+def SDK_DES = "build/outputs/jar/"
+def JAR_FILE = "build/intermediates/aar_main_jar/release/classes.jar"
+def JAR_NAME = "softAp"
+task delBuild(type: Delete) {
+    delete JAR_NAME+ ".jar"
+}
+
+task makeJar(type: Jar) {
+    from zipTree(JAR_FILE)
+    baseName = JAR_NAME
+    destinationDir = file(SDK_DES)
+}
+makeJar.dependsOn(delBuild, build)
