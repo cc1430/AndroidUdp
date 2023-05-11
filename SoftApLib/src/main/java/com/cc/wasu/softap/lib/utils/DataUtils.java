@@ -20,7 +20,7 @@ public class DataUtils {
      */
     public static byte[] buildDataPacket(String payload) {
         String encodedPayload = Base64.encodeToString(payload.getBytes(), Base64.DEFAULT);
-        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(512);
         byteBuffer.put(GlobalDef.PROTOCOL_HEAD);
         byte[] contentLength = getContentLength(encodedPayload);
         byteBuffer.put(contentLength);
@@ -39,6 +39,7 @@ public class DataUtils {
     public static byte[] buildEncryptDataPacket(String payload, String aesKey) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
         String encryptPayload = AESUtils.encryptCBC(payload, aesKey);
+        ApLog.d(ApLog.TAG, "encryptPayload = " + encryptPayload);
         byteBuffer.put(GlobalDef.PROTOCOL_HEAD);
         byte[] contentLength = getContentLength(encryptPayload);
         byteBuffer.put(contentLength);

@@ -1,10 +1,15 @@
 package com.cc.wasu.softap.lib.utils;
 
+import android.text.TextUtils;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
     public static String getEncode(String input) {
+        if (TextUtils.isEmpty(input)) {
+            return "";
+        }
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] bs = md.digest(input.getBytes());

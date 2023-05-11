@@ -41,7 +41,7 @@ dependencies {
 
 def SDK_DES = "build/outputs/jar/"
 def JAR_FILE = "build/intermediates/aar_main_jar/release/classes.jar"
-def JAR_NAME = "softAp"
+def JAR_NAME = "SoftAp"
 task delBuild(type: Delete) {
     delete JAR_NAME+ ".jar"
 }

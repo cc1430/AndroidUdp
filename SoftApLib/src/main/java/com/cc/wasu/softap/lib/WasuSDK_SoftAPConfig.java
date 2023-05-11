@@ -29,19 +29,27 @@ public class WasuSDK_SoftAPConfig {
 
     public static final String TAG = ApLog.TAG;
 
+    private static WasuSDK_SoftAPConfig instance;
     private Context context;
     private UDPSocket udpSocket;
     private Handler handler;
     public static String deviceId;
     public static String productId;
 
-    public WasuSDK_SoftAPConfig() {
+    public static WasuSDK_SoftAPConfig getInstance() {
+        if (null == instance) {
+            instance = new WasuSDK_SoftAPConfig();
+        }
+        return instance;
+    }
+
+    private WasuSDK_SoftAPConfig() {
 
     }
 
     public void init(Context context) {
         this.context = context;
-        udpSocket = new UDPSocket(context);
+        udpSocket = new UDPSocket();
         udpSocket.setSocketResultListener(listener);
     }
 
@@ -49,11 +57,11 @@ public class WasuSDK_SoftAPConfig {
         ApLog.enableLog = enable;
     }
 
-    public void findDevice(Handler handler) {
+    public void findDevice(String ssid, String pwd, Handler handler) {
         this.handler = handler;
         WifiUtils.withContext(context).enableWifi();
         WifiUtils.withContext(context)
-                .connectWith(GlobalDef.AP_SSID, GlobalDef.AP_PWD)
+                .connectWith(ssid, pwd)
                 .setTimeout(15000)
                 .onConnectionResult(new ConnectionSuccessListener() {
                     @Override
@@ -80,7 +88,16 @@ public class WasuSDK_SoftAPConfig {
                 }).start();
     }
 
-    public void getDeviceInfo() {
+    public void startUdpSocket() {
+        udpSocket.startUDPSocket();
+    }
+
+    public void stopUdpSocket() {
+        udpSocket.stopUDPSocket();
+    }
+
+    public void getDeviceInfo(Handler handler) {
+        this.handler = handler;
         JSONObject payloadJson = new JSONObject();
         try {
             payloadJson.put("cmdId", 1);
@@ -118,7 +135,7 @@ public class WasuSDK_SoftAPConfig {
      * @param ssid 热点名称	必须
      * @param pwd 热点密码	必须
      */
-    public void startApConfig(String ssid, String pwd) {
+    public void startApConfig(String ssid, String pwd, String token) {
         JSONObject payloadJson = new JSONObject();
         try {
             payloadJson.put("cmdId", 3);
@@ -129,11 +146,13 @@ public class WasuSDK_SoftAPConfig {
             payloadJson.put("ssid", ssid);
             payloadJson.put("pwd", pwd);
             payloadJson.put("encrypt", 3);
+            payloadJson.put("token", token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         String payload = payloadJson.toString();
+        ApLog.d(TAG, payload);
         byte[] message = DataUtils.buildEncryptDataPacket(payload, DataUtils.getMD5AesKey(deviceId));
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < message.length; i++) {
@@ -151,6 +170,10 @@ public class WasuSDK_SoftAPConfig {
             if (handler != null) {
                 Message message;
                 JSONObject obj = JSON.parseObject(data);
+                if (obj == null) {
+                    ApLog.e(ApLog.TAG, "JSON数据解析失败！");
+                    return;
+                }
                 int cmdId = obj.getInteger("cmdId");
                 if (cmdId == 2) {
                     deviceId = obj.getString("deviceId");

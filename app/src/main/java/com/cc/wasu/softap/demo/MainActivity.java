@@ -29,7 +29,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    WasuSDK_SoftAPConfig config;
     LinearLayout llContent;
     Context context;
 
@@ -101,28 +100,27 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermission();
 
-        config = new WasuSDK_SoftAPConfig();
-        config.init(this);
-        config.enableLog(true);
+        WasuSDK_SoftAPConfig.getInstance().init(context);
+        WasuSDK_SoftAPConfig.getInstance().enableLog(true);
 
         findViewById(R.id.tv_config_ap).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                config.findDevice(handler);
+                WasuSDK_SoftAPConfig.getInstance().findDevice(GlobalDef.AP_SSID, GlobalDef.AP_PWD, handler);
             }
         });
 
         findViewById(R.id.tv_devId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                config.getDeviceInfo();
+                WasuSDK_SoftAPConfig.getInstance().getDeviceInfo(handler);
             }
         });
 
         findViewById(R.id.tv_config_wifi).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                config.startApConfig(GlobalDef.AP_SSID_1, GlobalDef.AP_PWD_1);
+                WasuSDK_SoftAPConfig.getInstance().startApConfig(GlobalDef.AP_SSID_1, GlobalDef.AP_PWD_1, "123");
             }
         });
     }
@@ -158,6 +156,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        config.unInit();
+        WasuSDK_SoftAPConfig.getInstance().unInit();
     }
 }

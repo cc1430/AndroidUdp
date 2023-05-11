@@ -1,11 +1,8 @@
 package com.cc.wasu.softap.lib.udp;
 
-import android.content.Context;
-import android.util.Log;
-
+import com.cc.wasu.softap.lib.GlobalDef;
 import com.cc.wasu.softap.lib.utils.ApLog;
 import com.cc.wasu.softap.lib.utils.DataUtils;
-import com.cc.wasu.softap.lib.GlobalDef;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -29,7 +26,6 @@ public class UDPSocket {
 
     private boolean isThreadRunning = false;
 
-    private Context mContext;
     private DatagramSocket client;
     private DatagramPacket receivePacket;
     private SocketResultListener socketResultListener;
@@ -42,10 +38,7 @@ public class UDPSocket {
     private Thread clientThread;
     private HeartbeatTimer timer;
 
-    public UDPSocket(Context context) {
-
-        this.mContext = context;
-
+    public UDPSocket() {
         int cpuNumbers = Runtime.getRuntime().availableProcessors();
         // 根据CPU数目初始化线程池
         mThreadPool = Executors.newFixedThreadPool(cpuNumbers * POOL_SIZE);
@@ -102,15 +95,15 @@ public class UDPSocket {
                 }
                 lastReceiveTime = System.currentTimeMillis();
                 ApLog.d(TAG, "receive packet success...");
-            } catch (IOException e) {
-                Log.e(TAG, "UDP数据包接收失败！线程停止");
+            } catch (Exception e) {
+                ApLog.e(TAG, "UDP数据包接收失败！线程停止");
                 stopUDPSocket();
                 e.printStackTrace();
                 return;
             }
 
             if (receivePacket == null || receivePacket.getLength() == 0) {
-                Log.e(TAG, "无法接收UDP数据或者接收到的UDP数据为空");
+                ApLog.e(TAG, "无法接收UDP数据或者接收到的UDP数据为空");
                 continue;
             }
             ApLog.d(TAG, "#receiveMessage: from " + receivePacket.getAddress().getHostAddress() + ":" + receivePacket.getPort());
