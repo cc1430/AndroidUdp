@@ -100,12 +100,13 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermission();
 
-        WasuSDK_SoftAPConfig.getInstance().init(context);
+        WasuSDK_SoftAPConfig.getInstance().init(this);
         WasuSDK_SoftAPConfig.getInstance().enableLog(true);
 
         findViewById(R.id.tv_config_ap).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                WasuSDK_SoftAPConfig.getInstance().startUdpSocket();
                 WasuSDK_SoftAPConfig.getInstance().findDevice(GlobalDef.AP_SSID, GlobalDef.AP_PWD, handler);
             }
         });

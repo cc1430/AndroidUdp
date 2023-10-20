@@ -113,7 +113,9 @@ public class UDPSocket {
 
             if (DataUtils.checkReceivedDataSum(receivePacket.getData())) {
                 if (socketResultListener != null) {
-                    socketResultListener.onDataReceived(DataUtils.getPayload(receivePacket.getData()));
+                    String decryptData = DataUtils.getPayload(receivePacket.getData());
+                    ApLog.d(TAG, "payload解密结果：" + decryptData);
+                    socketResultListener.onDataReceived(decryptData);
                 }
             } else {
                 if (socketResultListener != null) {

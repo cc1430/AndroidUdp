@@ -169,30 +169,31 @@ public class WasuSDK_SoftAPConfig {
         public void onDataReceived(String data) {
             if (handler != null) {
                 Message message;
-                JSONObject obj = JSON.parseObject(data);
-                if (obj == null) {
-                    ApLog.e(ApLog.TAG, "JSON数据解析失败！");
-                    return;
-                }
-                int cmdId = obj.getInteger("cmdId");
-                if (cmdId == 2) {
-                    deviceId = obj.getString("deviceId");
-                    productId = obj.getString("productId");
-                    message = handler.obtainMessage(MSG_RECEIVER_DEV_INFO);
-                    message.arg1 = GlobalDef.STATUS_CODE_2000;
-                    message.obj = data;
-                    handler.sendMessage(message);
-                } else if (cmdId == 4) {
-                    int connect = obj.getInteger("connectTest");
-                    if (connect == 0) {
-                        message = handler.obtainMessage(MSG_CONFIG_NETWORK_SUCCESS);
-                        message.arg1 = GlobalDef.STATUS_CODE_1000;
-                    } else {
-                        message = handler.obtainMessage(MSG_CONFIG_NETWORK_FAILED);
-                        message.arg1 = GlobalDef.STATUS_CODE_1001;
+                try {
+                    JSONObject obj = JSON.parseObject(data);
+                    int cmdId = obj.getInteger("cmdId");
+                    if (cmdId == 2) {
+                        deviceId = obj.getString("deviceId");
+                        productId = obj.getString("productId");
+                        message = handler.obtainMessage(MSG_RECEIVER_DEV_INFO);
+                        message.arg1 = GlobalDef.STATUS_CODE_2000;
+                        message.obj = data;
+                        handler.sendMessage(message);
+                    } else if (cmdId == 4) {
+                        int connect = obj.getInteger("connectTest");
+                        if (connect == 0) {
+                            message = handler.obtainMessage(MSG_CONFIG_NETWORK_SUCCESS);
+                            message.arg1 = GlobalDef.STATUS_CODE_1000;
+                        } else {
+                            message = handler.obtainMessage(MSG_CONFIG_NETWORK_FAILED);
+                            message.arg1 = GlobalDef.STATUS_CODE_1001;
+                        }
+                        message.obj = data;
+                        handler.sendMessage(message);
                     }
-                    message.obj = data;
-                    handler.sendMessage(message);
+                } catch (Exception e) {
+                    ApLog.e(ApLog.TAG, "JSON数据解析失败！");
+                    e.printStackTrace();
                 }
             }
         }
