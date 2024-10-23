@@ -5,7 +5,7 @@ import android.util.Log;
 public class ApLog {
 
     public static boolean enableLog = false;
-    public static final String TAG = "chenchen";
+    public static final String TAG = "SoftAp";
 
     public static void d(String tag, Object msg) {
         if (enableLog) {

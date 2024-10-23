@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 public class UDPSocket {
 
-    private static final String TAG = "chenchen";
+    private static final String TAG = "SoftAp";
 
     // 单个CPU线程池大小
     private static final int POOL_SIZE = 5;

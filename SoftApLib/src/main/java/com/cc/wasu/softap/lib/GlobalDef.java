@@ -2,11 +2,11 @@ package com.cc.wasu.softap.lib;
 
 public class GlobalDef {
 
-    public static final String AP_SSID = "WASU_OUTLET_C43D"; //"WASU_OUTLET_C43D"; //"WASU-AP-LINK";
-    public static final String AP_PWD = "cb0cC43D"; //"cb0cC43D"; // "Wasu@2023";
+    public static String AP_SSID = "WASU_BPM_C3E1"; //"WASU_OUTLET_C43D"; //"WASU-AP-LINK";
+    public static String AP_PWD = "c6efC3E1"; //"cb0cC43D"; // "Wasu@2023";
 
-    public static final String AP_SSID_1 = "nova"; //"H3C_46C6A3";
-    public static final String AP_PWD_1 = "12345678"; //"Study@812A3";
+    public static String AP_SSID_1 = "ME-TEST"; //"H3C_46C6A3";
+    public static String AP_PWD_1 = "12345678"; //"Study@812A3";
     public static final String SERVER_IP = "192.168.4.1";
     public static final int SERVER_PORT = 10001;
 
